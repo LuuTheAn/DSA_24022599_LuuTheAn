@@ -1,0 +1,156 @@
+#include <iostream>
+using namespace std;
+
+class MaxHeap {
+private:
+    int list[100];
+    int n;
+    void heapify(int i) {
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        int largest = i;
+
+        if (left < n && list[left] > list[largest])
+            largest = left;
+        if (right < n && list[right] > list[largest])
+            largest = right;
+        if (largest != i) {
+            swap(list[i], list[largest]);
+            heapify(largest);
+        }
+    }
+
+public:
+    MaxHeap() : n(0) {}
+    void insert(int val) {
+        if (n >= 100) return;
+        list[n] = val;
+        int i = n;
+        n++;
+        while (i > 0 && list[i] > list[(i - 1) / 2]) {
+            swap(list[i], list[(i - 1) / 2]);
+            i = (i - 1) / 2;
+        }
+    }
+
+
+
+    int delMax() {
+        if (isEmpty()) return -1;
+        int maxVal = list[0];
+        swap(list[0], list[n - 1]);
+        n--;
+        heapify(0);
+        return maxVal;
+    }
+
+    int getMax() {
+        if (isEmpty()) return -1;
+        return list[0];
+    }
+
+    bool isEmpty() { return n == 0; }
+    int size() { return n; }
+
+    void printHeap() {
+        for (int i = 0; i < n; ++i)
+            cout << list[i] << " ";
+        cout << endl;
+    }
+};
+
+
+
+
+class MinHeap {
+private:
+    int list[100];
+    int n;
+
+    void heapify(int i) {
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        int smallest = i;
+
+        if (left < n && list[left] < list[smallest])
+            smallest = left;
+        if (right < n && list[right] < list[smallest])
+            smallest = right;
+
+        if (smallest != i) {
+            swap(list[i], list[smallest]);
+            heapify(smallest);
+        }
+    }
+
+public:
+    MinHeap() : n(0) {}
+
+    void insert(int val) {
+        if (n >= 100) return;
+        list[n] = val;
+        int i = n;
+        n++;
+        while (i > 0 && list[i] < list[(i - 1) / 2]) {
+            swap(list[i], list[(i - 1) / 2]);
+            i = (i - 1) / 2;
+        }
+    }
+
+    int delMin() {
+        if (isEmpty()) return -1;
+        int minVal = list[0];
+        swap(list[0], list[n - 1]);
+        n--;
+        heapify(0);
+        return minVal;
+    }
+
+    int getMin() {
+        if (isEmpty()) return -1;
+        return list[0];
+    }
+
+    bool isEmpty() { return n == 0; }
+    int size() { return n; }
+
+    void printHeap() {
+        for (int i = 0; i < n; ++i)
+            cout << list[i] << " ";
+        cout << endl;
+    }
+};
+
+
+
+
+
+//TEST
+int main() {
+    MaxHeap maxHeap;
+    MinHeap minHeap;
+
+    cout << "Testing MaxHeap:\n";
+    maxHeap.insert(10);
+    maxHeap.insert(4);
+    maxHeap.insert(15);
+    maxHeap.insert(20);
+    maxHeap.printHeap();
+
+    cout << "Max = " << maxHeap.getMax() << endl;
+    cout << "Deleted Max = " << maxHeap.delMax() << endl;
+    maxHeap.printHeap();
+
+    cout << "\nTesting MinHeap:\n";
+    minHeap.insert(10);
+    minHeap.insert(4);
+    minHeap.insert(15);
+    minHeap.insert(20);
+    minHeap.printHeap();
+
+    cout << "Min = " << minHeap.getMin() << endl;
+    cout << "Deleted Min = " << minHeap.delMin() << endl;
+    minHeap.printHeap();
+
+    return 0;
+}
